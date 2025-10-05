@@ -57,13 +57,14 @@ pipeline {
               }
          }
 */
-        stage('Docker Push') {
+        
+stage('Docker Push') {
     steps {
-        script {
-            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-cred') {
-                sh 'docker push tejasbs774/sprint-boot-app:v1.$BUILD_ID'
-                sh 'docker push tejasbs774/sprint-boot-app:latest'
-            }
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+            sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+            sh 'docker push tejasbs774/sprint-boot-app:v1.$BUILD_ID'
+            sh 'docker push tejasbs774/sprint-boot-app:latest'
+            sh 'docker rmi tejasbs774/sprint-boot-app:v1.$BUILD_ID tejasbs774/sprint-boot-app:latest'
         }
     }
 }
