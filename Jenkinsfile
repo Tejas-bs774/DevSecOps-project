@@ -53,7 +53,7 @@ pipeline {
 
         stage('Upload Scan report to AWS S3') {
               steps {
-                  sh 'aws s3 cp report.html s3://devsecops-project/'
+                  sh 'aws s3 cp report.html s3://devsecops-trivy-reports-pioneer/'
               }
          }
 
