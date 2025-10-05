@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Image Scan') {
             steps {
-      	        sh ' trivy image --format template --template "@/usr/local/share/trivy/templates/html.tpl" -o report.html praveensirvi/sprint-boot-app:latest '
+      	        sh ' trivy image --timeout 20m --format template --template "@/usr/local/share/trivy/templates/html.tpl" -o report.html tejasbs774/sprint-boot-app:latest '
             }
         }
         stage('Upload Scan report to AWS S3') {
