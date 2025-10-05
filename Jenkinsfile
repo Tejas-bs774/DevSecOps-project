@@ -57,16 +57,16 @@ pipeline {
               }
          }
 */
-        stage('Docker  Push') {
-            steps {
-                withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-cred', vaultUrl: 'http://your-vault-server-ip:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
-                    sh "docker login -u ${username} -p ${password} "
-                    sh 'docker push tejasbs774/sprint-boot-app:v1.$BUILD_ID'
-                    sh 'docker push tejasbs774/sprint-boot-app:latest'
-                    sh 'docker rmi tejasbs774/sprint-boot-app:v1.$BUILD_ID tejasbs774/sprint-boot-app:latest'
-                }
+        stage('Docker Push') {
+    steps {
+        script {
+            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-cred') {
+                sh 'docker push tejasbs774/sprint-boot-app:v1.$BUILD_ID'
+                sh 'docker push tejasbs774/sprint-boot-app:latest'
             }
         }
+    }
+}
         stage('Deploy to k8s') {
             steps {
                 script{
