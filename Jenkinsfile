@@ -50,11 +50,13 @@ pipeline {
       	        sh ' trivy image --timeout 20m --format template --template "@/usr/local/share/trivy/templates/html.tpl" -o report.html tejasbs774/sprint-boot-app:latest '
             }
         }
+/*
         stage('Upload Scan report to AWS S3') {
               steps {
                   sh 'aws s3 cp report.html s3://devsecops-project/'
               }
          }
+*/
         stage('Docker  Push') {
             steps {
                 withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-cred', vaultUrl: 'http://your-vault-server-ip:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
