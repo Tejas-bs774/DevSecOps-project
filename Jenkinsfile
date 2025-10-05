@@ -69,15 +69,15 @@ stage('Docker Push') {
     }
 }
         stage('Deploy to k8s') {
-            steps {
-                script{
-                    kubernetesDeploy configs: 'spring-boot-deployment.yaml', kubeconfigId: 'kubernetes'
-                }
-            }
+    steps {
+        script {
+            sh 'kubectl apply -f spring-boot-deployment.yaml'
+            sh 'kubectl rollout status deployment/spring-boot-app'
+            sh 'kubectl get pods'
+            sh 'kubectl get services'
         }
-        
- 
     }
+}
     post{
         always{
             sendSlackNotifcation()
