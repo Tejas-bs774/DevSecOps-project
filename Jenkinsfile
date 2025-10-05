@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout git') {
             steps {
-               git branch: 'main', url: 'https://github.com/praveensirvi1212/DevSecOps-project'
+               git branch: 'main', url: 'https://github.com/Tejas-bs774/DevSecOps-project'
             }
         }
         
@@ -20,6 +20,7 @@ pipeline {
                 }   
             }
         }
+/*
         stage('SonarQube Analysis'){
             steps{
                 withSonarQubeEnv('SonarQube-server') {
@@ -37,11 +38,11 @@ pipeline {
               }
             }
         }
-        
+ */       
         stage('Docker  Build') {
             steps {
-      	        sh 'docker build -t praveensirvi/sprint-boot-app:v1.$BUILD_ID .'
-                sh 'docker image tag praveensirvi/sprint-boot-app:v1.$BUILD_ID praveensirvi/sprint-boot-app:latest'
+      	        sh 'docker build -t tejasbs774/sprint-boot-app:v1.$BUILD_ID .'
+                sh 'docker image tag tejasbs774/sprint-boot-app:v1.$BUILD_ID tejasbs774/sprint-boot-app:latest'
             }
         }
         stage('Image Scan') {
@@ -58,9 +59,9 @@ pipeline {
             steps {
                 withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-cred', vaultUrl: 'http://your-vault-server-ip:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
                     sh "docker login -u ${username} -p ${password} "
-                    sh 'docker push praveensirvi/sprint-boot-app:v1.$BUILD_ID'
-                    sh 'docker push praveensirvi/sprint-boot-app:latest'
-                    sh 'docker rmi praveensirvi/sprint-boot-app:v1.$BUILD_ID praveensirvi/sprint-boot-app:latest'
+                    sh 'docker push tejasbs774/sprint-boot-app:v1.$BUILD_ID'
+                    sh 'docker push tejasbs774/sprint-boot-app:latest'
+                    sh 'docker rmi tejasbs774/sprint-boot-app:v1.$BUILD_ID tejasbs774/sprint-boot-app:latest'
                 }
             }
         }
