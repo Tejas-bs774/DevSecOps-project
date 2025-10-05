@@ -78,6 +78,8 @@ stage('Docker Push') {
         }
     }
 }
+
+}
     post{
         always{
             sendSlackNotifcation()
