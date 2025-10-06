@@ -74,6 +74,7 @@ stage('Docker Push') {
             sh '''
                 export KUBECONFIG=/var/lib/jenkins/.kube/config
                 kubectl apply -f spring-boot-deployment.yaml
+		kubectl rollout status deployment/spring-app-deployment
                 kubectl get pods
                 kubectl get svc
             '''
