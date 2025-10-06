@@ -71,10 +71,13 @@ stage('Docker Push') {
         stage('Deploy to k8s') {
     steps {
         script {
-            sh 'kubectl apply -f spring-boot-deployment.yaml'
-            sh 'kubectl rollout status deployment/spring-boot-app'
-            sh 'kubectl get pods'
-            sh 'kubectl get services'
+            sh '''
+                export KUBECONFIG=/var/lib/jenkins/.kube/config
+                kubectl apply -f spring-boot-deployment.yaml --validate=false
+                kubectl rollout status deployment/spring-boot-app
+                kubectl get pods
+                kubectl get services
+            '''
         }
     }
 }
